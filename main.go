@@ -1,16 +1,11 @@
-package echo_restful_api
+package main
 
 import (
-	"github.com/labstack/echo/v4"
-	"net/http"
+	"github.com/satriyoaji/echo-restful-api/routes"
 )
 
 func main()  {
-	e := echo.New()
-
-	e.GET("/", func(context echo.Context) error {
-		return context.String(http.StatusOK, "Hello world!")
-	})
+	e := routes.Init()
 
 	e.Logger.Fatal(e.Start(":8000"))
 }
