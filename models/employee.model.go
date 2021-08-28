@@ -42,3 +42,87 @@ func FetchAllEmployees() (Response, error) {
 
 	return res, nil
 }
+
+func StoreEmployee(name, address, phone string) (Response, error) {
+	var res Response
+
+	con := database.GetConnection()
+
+	sqlStatement := "INSERT employees (name, address, phone) VALUES (?,?,?)"
+	stmt, err := con.Prepare(sqlStatement)
+	if err != nil {
+		return res, err
+	}
+	result, err := stmt.Exec(name, address, phone)
+	if err != nil {
+		return res, err
+	}
+	lastInsertedId, err := result.LastInsertId()
+	if err != nil {
+		return res, err
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully created"
+	res.Data = map[string]int64{
+		"last_inserted_id": lastInsertedId,
+	}
+
+	return res, nil
+}
+
+func UpdateEmployee(id int, name, address, phone string) (Response, error) {
+	var res Response
+
+	con := database.GetConnection()
+
+	sqlStatement := "UPDATE employees set name = ?, address = ?, phone = ? WHERE id = ?"
+	stmt, err := con.Prepare(sqlStatement)
+	if err != nil {
+		return res, err
+	}
+	result, err := stmt.Exec(name, address, phone, id)
+	if err != nil {
+		return res, err
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return res, err
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully updated"
+	res.Data = map[string]int64{
+		"rows_affected": rowsAffected,
+	}
+
+	return res, nil
+}
+
+func DeleteEmployee(id int) (Response, error) {
+	var res Response
+
+	con := database.GetConnection()
+
+	sqlStatement := "DELETE FROM employees WHERE id = ?"
+	stmt, err := con.Prepare(sqlStatement)
+	if err != nil {
+		return res, err
+	}
+	result, err := stmt.Exec(id)
+	if err != nil {
+		return res, err
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return res, err
+	}
+
+	res.Status = http.StatusOK
+	res.Message = "Successfully deleted"
+	res.Data = map[string]int64{
+		"rows_affected": rowsAffected,
+	}
+
+	return res, nil
+}

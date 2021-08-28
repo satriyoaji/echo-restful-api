@@ -13,7 +13,10 @@ func Init() *echo.Echo {
 		return context.String(http.StatusOK, "Hello world!")
 	})
 
-	e.GET("/employees", controllers.FetchAllEmployees)
+	e.GET("api/employees", controllers.FetchAllEmployees)
+	e.POST("api/employees", controllers.StoreEmployee)
+	e.PUT("api/employees/:id", controllers.UpdateEmployee)
+	e.DELETE("api/employees/:id", controllers.DeleteEmployee)
 
 	return e
 }
