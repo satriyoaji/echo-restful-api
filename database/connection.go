@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/satriyoaji/echo-restful-api/config"
-	"github.com/satriyoaji/echo-restful-api/helper"
+	"github.com/satriyoaji/echo-restful-api/helpers"
 )
 
 var DB *sql.DB
@@ -18,7 +18,7 @@ func Init() {
 		")/" + config.GoDotEnvVariable("DB_NAME") +
 		"?parseTime=True&loc=Local"
 	connection, err := sql.Open("mysql", connectionString)
-	helper.OutputPanicError(err)
+	helpers.OutputPanicError(err)
 
 	DB = connection
 

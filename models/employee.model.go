@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/satriyoaji/echo-restful-api/database"
-	"github.com/satriyoaji/echo-restful-api/helper"
+	"github.com/satriyoaji/echo-restful-api/helpers"
 	"net/http"
 )
 
@@ -25,7 +25,7 @@ func FetchAllEmployees() (Response, error) {
 	rows, err := con.Query(sqlStatement)
 	defer rows.Close()
 
-	helper.OutputPanicError(err)
+	helpers.OutputPanicError(err)
 
 	for rows.Next() {
 		err = rows.Scan(&obj.Id, &obj.Name, &obj.Address, &obj.Phone)
