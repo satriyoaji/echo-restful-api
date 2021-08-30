@@ -25,7 +25,9 @@ func StoreEmployee(c echo.Context) error {
 
 	result, err := models.StoreEmployee(name, address, phone)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err.Error())
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"message": err.Error(),
+		})
 	}
 
 	return c.JSON(http.StatusOK, result)
@@ -63,4 +65,3 @@ func DeleteEmployee(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, result)
 }
-

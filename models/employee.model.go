@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/satriyoaji/echo-restful-api/database"
 	"github.com/satriyoaji/echo-restful-api/helpers"
 	"net/http"
@@ -45,6 +46,18 @@ func FetchAllEmployees() (Response, error) {
 
 func StoreEmployee(name, address, phone string) (Response, error) {
 	var res Response
+
+	v := validator.New()
+	employeeStruct := Employee{
+		Name:    name,
+		Address: address,
+		Phone:   phone,
+	}
+	// validation input
+	err := v.Struct(employeeStruct)
+	if err != nil {
+		return res, err
+	}
 
 	con := database.GetConnection()
 

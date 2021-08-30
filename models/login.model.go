@@ -3,18 +3,30 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go-playground/validator/v10"
 	"github.com/satriyoaji/echo-restful-api/database"
 	"github.com/satriyoaji/echo-restful-api/helpers"
 )
 
 type User struct {
 	Id    int    `json:"id"`
-	Email string `json:"email" validate:"email,required,unique"`
+	Email string `json:"email" validate:"required,email,unique"`
 }
 
 func CheckLogin(email, password string) (bool, error) {
 	var obj User
 	var pwd string
+
+	v := validator.New()
+	credentialStruct := User{
+		Email: email,
+	}
+	// validation input
+	errorLogin := v.Struct(credentialStruct)
+	if errorLogin != nil {
+		return false, errorLogin
+	}
+
 	con := database.GetConnection()
 
 	sqlStatement := "SELECT * FROM users WHERE email = ?"
